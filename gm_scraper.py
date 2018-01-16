@@ -1,5 +1,5 @@
 ##       By: Wesley Smith        ##
-## Repo at:                       $$
+## Repo at:https://github.com/WesLSmith/ScheduleExplorer_Scraper ##
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
