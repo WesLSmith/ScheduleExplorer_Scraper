@@ -1,5 +1,5 @@
 ##       By: Wesley Smith        ##
-## Repo at:https://github.com/WesLSmith/ScheduleExplorer_Scraper ##
+## Repo at:                      $$
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -49,6 +49,12 @@ def get_schedule_explorer_data(url, webdriver_path,lat_long = True):
     ##Regex for travel time
     travel_times = re.findall('class="duration" jsan="7.duration">(.*?)</span>', html_source)
     travel_times = travel_times[::2]
+    ##Get number of steps for each route, Steps are each mode change e.g. walking to bus, bus to train, train to walking, STEPS DO NOT INCLUDE TIME SPENT WAITING
+    step_divs = browser.find_elements_by_class_name("steps")
+    steps = []
+    for i in range(len(step_divs)):
+        step_total = step_divs[i].find_elements_by_class_name("step")
+        steps.append(len(step_total))
     ##Pandas Export
     depart_times = pd.Series(depart_times)
     arrival_times = pd.Series(arrival_times)
@@ -57,6 +63,7 @@ def get_schedule_explorer_data(url, webdriver_path,lat_long = True):
     temp_df["depart_time"] = depart_times
     temp_df["arrival_time"] = arrival_times
     temp_df["travel_time"] = travel_times
+    temp_df["steps"] = steps
     ##Optionally return coordinates from weh address
     if lat_long == True:
         temp_df["orgin_coords"] = url.split('/')[5]
